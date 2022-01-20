@@ -114,10 +114,10 @@ export_node :: proc(node: ^Node($T)) -> ^Node(T) {
 		return nil
 	}
 
-	if node.next {
+	if node.next != nil {
 		node.next.prev = node.prev
 	}
-	if node.prev {
+	if node.prev != nil {
 		node.prev.next = node.next
 	}
 
@@ -133,13 +133,13 @@ remove :: proc(head: ^^Node($T), node: ^Node(T)) -> (data: T, ok: bool) {
 	}
 
 	if head^ == node {
-		return pop(head)
+		return pop(head), true
 	}
 
 	export_node(node)
-	data := node.data
+	data = node.data
 	free(node)
-	return data
+	return data, true
 }
 
 destroy_all :: proc(head: ^^Node($T)) {
